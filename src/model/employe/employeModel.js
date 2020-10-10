@@ -1,3 +1,4 @@
+const { promise } = require('../../config/db_hireapp')
 const db = require('../../config/db_hireapp')
 
 module.exports = {
@@ -72,5 +73,20 @@ module.exports = {
         err?reject(new Error(err.message)) : resolve(result)
       })
     })
-  }
+  },
+  // updateEmploye : (data,id) => {
+  //   return new promise((resolve,reject) => {
+  //     db.query(`UPDATE employe SET 
+  //     jobdesk='${data.jobdesk}',
+  //     domisili='${data.domisili}',
+  //     workplace='${data.workplace}',
+  //     description='${data.description}',
+  //     instagram='${data.instagram}',
+  //     github='${data.github}',
+  //     linkedin='${data.linkedin}'
+  //     WHERE id_employe='${id}'
+      
+  //     `)
+  //   })
+  // }
 }

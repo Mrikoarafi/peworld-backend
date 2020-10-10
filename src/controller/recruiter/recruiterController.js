@@ -59,24 +59,23 @@ module.exports = {
     const body = req.body
     try {
       const recruiter = await loginModelRecruiter (body)
-      const PassDb = recruiter[0].password
-      const email = recruiter[0].email_recruiter
-      const idRecruiterDb = recruiter[0].id_recruiter
-      const role = 1
-      if (recruiter) {
+      if (recruiter.length>0) {
+        const PassDb = recruiter[0].password
+        const email = recruiter[0].email_recruiter
+        const idRecruiterDb = recruiter[0].id_recruiter
+        const role = 1
           const matchPass = await bcrypt.compare(body.password,PassDb)
           if (matchPass) {
             // Success
-          
-             jwt.sign({email:email,role:role},JWTRECRUITER, (err,tokenacc) => {
-              success(res, {id:idRecruiterDb,role:role,tokenacc}, 'Success')
-            })
-         }else{
-           failed(res,[],'Wrong password')
-          }
-       }else{
-         failed(res,[],'Recruiter has not been registered')
-       }
+              jwt.sign({email:email,role:role},JWTRECRUITER, (err,tokenacc) => {
+                success(res, {id:idRecruiterDb,role:role,tokenacc}, 'Success')
+              })
+          }else{
+            failed(res,[],'Wrong password')
+            }
+        }else{
+          failed(res,[],'Email has not been registered')
+        }
       } catch (error) {
         errorServer(res, [], error.message)
       }
