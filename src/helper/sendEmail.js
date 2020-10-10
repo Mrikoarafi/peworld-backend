@@ -8,8 +8,8 @@ module.exports = {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "hacker0001223@gmail.com",
-        pass: "ammarpedia123",
+        user: EMAIL,
+        pass: PASSWORD,
       },
     });
     const link = `http://localhost:3000/employe/register/${isjwt}`;
@@ -29,5 +29,33 @@ module.exports = {
     
   },
   sendEmailRecruiter: (email) => {
+    const token = jwt.sign({ email: email}, JWTRECRUITER)
+
+    const output = `
+          <center><h3>Hello ${email}</h3>
+          <h3>Thank you for registration</h3>
+          <p>You can confirm your email by clicking the link below <br> <a href="http://localhost:3000/hire/recruiter/verify/${token}">Activation</a></p></center>
+    `
+
+    let transporter = nodemailer.createTransport({
+      host: 'smtp.gmail.com',
+      port: '587',
+      secure: false,
+      requireTLS: true,
+      auth: {
+        user: EMAIL,
+        pass: PASSWORD
+      }
+    })
+
+    let Mail = {
+      from: '"Peworld" <peworld@peworld.com>',
+      to: email,
+      subject: "Verification Email",
+      text: "Plaintext version of the message",
+      html: output
+    }
+
+    transporter.sendMail(Mail)
   }
 }

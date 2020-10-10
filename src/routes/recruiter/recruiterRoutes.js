@@ -3,11 +3,14 @@ const router = express.Router()
 
 // Call Controller
 const {getAllControllerRecruiter,getDetailController,loginController,deleteController} = require('../../controller/recruiter/recruiterController')
-const {authentikasi,employe,recruiter} = require('../../helper/authentikasi')
+const {authentikasi,recruiter} = require('../../helper/authentikasi')
+const recruiterController = require('../../controller/recruiter/recruiterController')
 router
 .get('/getAll',authentikasi,recruiter, getAllControllerRecruiter)
 .get('/getDetail/:id', getDetailController)
 .get('/login', loginController)
 .delete('/delete/:id', deleteController)
+.post('/register', recruiterController.register)
+.get('/verify/:token', recruiterController.verify)
 
 module.exports = router
