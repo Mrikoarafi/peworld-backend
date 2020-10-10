@@ -4,6 +4,7 @@ const {getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verificati
 const {success,failed,errorServer} = require('../../helper/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
+const {sendEmailEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
 
 module.exports = {
