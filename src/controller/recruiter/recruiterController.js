@@ -59,7 +59,6 @@ module.exports = {
     const body = req.body
     try {
       const recruiter = await loginModelRecruiter (body)
-      const statusDb = recruiter[0].status
       const PassDb = recruiter[0].password
       const email = recruiter[0].email_recruiter
       const idRecruiterDb = recruiter[0].id_recruiter
@@ -73,10 +72,10 @@ module.exports = {
               success(res, {id:idRecruiterDb,role:role,tokenacc}, 'Success')
             })
          }else{
-           failed(res,[],'wrong password')
+           failed(res,[],'Wrong password')
           }
        }else{
-         failed(res,[],'Recruiter has not been registere')
+         failed(res,[],'Recruiter has not been registered')
        }
       } catch (error) {
         errorServer(res, [], error.message)
