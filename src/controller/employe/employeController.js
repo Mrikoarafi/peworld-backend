@@ -38,8 +38,9 @@ module.exports = {
           } else {
             const email = decode.email
             console.log(email)
-             const data = await verification(email)
-             success(res, data, 'activated email success')
+             await verification(email)
+             res.render("index", { email });
+            //  success(res, data, 'activated email success')
           }
         })
       }
