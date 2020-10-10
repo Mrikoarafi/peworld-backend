@@ -42,7 +42,7 @@ module.exports = {
             // Success
             const refreshtoken = jwt.sign({email:email,role:role}, JWT_REFRESH)
             UpdateRefreshToken(refreshtoken, idEmployeDb)
-             jwt.sign({email:email,role:role},JWTEMPLOYE,{expiresIn:'30s'}, (err,tokenacc) => {
+             jwt.sign({email:email,role:role},JWTEMPLOYE,{expiresIn:3600}, (err,tokenacc) => {
               success(res, {id:idEmployeDb,role:role,tokenacc,refreshtoken:refreshtoken}, 'Success')
             })
          }else{
