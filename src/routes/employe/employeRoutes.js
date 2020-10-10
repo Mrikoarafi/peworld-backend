@@ -8,10 +8,10 @@ router
 .get('/getAll', authentikasi,employe,getAllControllerEmploye)
 .get('/getDetail/:id', getDetailController)
 .get('/register/:token', verification ) 
-.get('/login', loginController)
+.post('/login', loginController)
 .post('/register', register ) 
 .post('/refreshtoken', refreshtoken ) 
-.put('/logout/:id', logoutController ) 
+.delete('/logout/:id', logoutController ) 
 .delete('/delete/:id',authentikasi,employe, deleteController ) 
 
 module.exports = router
