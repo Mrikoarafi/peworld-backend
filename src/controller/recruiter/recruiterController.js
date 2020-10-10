@@ -65,7 +65,6 @@ module.exports = {
       const idRecruiterDb = recruiter[0].id_recruiter
       const role = 1
       if (recruiter) {
-        if (statusDb!==0) {
           const matchPass = await bcrypt.compare(body.password,PassDb)
           if (matchPass) {
             // Success
@@ -76,9 +75,6 @@ module.exports = {
          }else{
            failed(res,[],'wrong password')
           }
-        }else{
-          failed(res,[],'Recruiter has not been actived')
-        }
        }else{
          failed(res,[],'Recruiter has not been registere')
        }

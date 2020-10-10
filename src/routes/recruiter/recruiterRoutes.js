@@ -8,7 +8,7 @@ const recruiterController = require('../../controller/recruiter/recruiterControl
 router
 .get('/getAll',authentikasi,recruiter, getAllControllerRecruiter)
 .get('/getDetail/:id', getDetailController)
-.get('/login', loginController)
+.post('/login', loginController)
 .delete('/delete/:id',authentikasi,recruiter, deleteController)
 .post('/register', recruiterController.register)
 .get('/verify/:token', recruiterController.verify)
