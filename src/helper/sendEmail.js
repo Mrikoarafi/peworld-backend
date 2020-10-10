@@ -1,7 +1,7 @@
 const {JWTEMPLOYE,JWTRECRUITER,JWT_REGIS,EMAIL,PASSWORD} = require('../helper/env')
 const nodemailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
-
+const {URL_LOKAL} = require('../helper/env')
 module.exports = {
   sendEmailEmploye: (email) => {
     const isjwt = jwt.sign({ email: email }, JWTEMPLOYE);
@@ -12,7 +12,7 @@ module.exports = {
         pass: PASSWORD,
       },
     });
-    const link = `http://localhost:3000/employe/register/${isjwt}`;
+    const link = `${URL_LOKAL}/employe/register/${isjwt}`;
     var mailOptions = {
       from: "as@gmail.com",
       to: email,
@@ -34,7 +34,7 @@ module.exports = {
     const output = `
           <center><h3>Hello ${email}</h3>
           <h3>Thank you for registration</h3>
-          <p>You can confirm your email by clicking the link below <br> <a href="http://localhost:3000/hire/recruiter/verify/${token}">Activation</a></p></center>
+          <p>You can confirm your email by clicking the link below <br> <a href="${URL_LOKAL}/hire/recruiter/verify/${token}">Activation</a></p></center>
     `
 
     let transporter = nodemailer.createTransport({
