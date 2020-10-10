@@ -1,4 +1,4 @@
-// Call Model
+  // Call Model
 const {getAllModelRecruiter,getDetailRecruiter,loginModelRecruiter,deleteModel} = require('../../model/recruiter/recruiterModel')
 // Call Response
 const {success,failed,errorServer} = require('../../helper/response')
