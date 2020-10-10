@@ -1,12 +1,12 @@
-const {JWTPEKERJA,JWTPEREKRUT,JWT_REGIS,EMAIL,PASSWORD} = require('../helper/env')
+const {JWTEMPLOYE,JWTRECRUITER,JWT_REGIS,EMAIL,PASSWORD} = require('../helper/env')
 const nodeMailer = require('nodemailer')
 const jwt = require('jsonwebtoken')
 
 module.exports = {
-  sendEmailPerekrut: (email) => {
+  sendEmailEmploye: (email) => {
     
   },
-  sendEmailPekerja: (email) => {
+  sendEmailRecruiter: (email) => {
 
   }
 }

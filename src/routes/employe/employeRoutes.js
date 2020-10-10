@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 
 // Call Controller
-const {getAllControllerEmploye} = require('../../controller/pekerja/pekerjaController')
+const {getAllControllerEmploye} = require('../../controller/employe/employeController')
 
 router
 .get('/getAll', getAllControllerEmploye)

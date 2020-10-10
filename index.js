@@ -2,8 +2,8 @@ const express = require('express')
 const app = express()
 const bodyParser = require('body-parser')
 const cors = require('cors')
-const employeRoutes = require('./src/routes/pekerja/pekerjaRoutes')
-const recruiterRoutes = require('./src/routes/perekrut/perekrutRoutes')
+const employeRoutes = require('./src/routes/employe/employeRoutes')
+const recruiterRoutes = require('./src/routes/recruiter/recruiterRoutes')
 const {
   PORT
 } = require("./src/helper/env");
