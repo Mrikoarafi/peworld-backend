@@ -95,7 +95,7 @@ module.exports = {
     if (newToken) {
       jwt.verify(newToken,JWT_REFRESH, (err,decode) => {
         if (decode.role===0) {
-          const refreshtoken = jwt.sign({email:decode.email,role:decode.role},JWTEMPLOYE,{expiresIn:'30s'})
+          const refreshtoken = jwt.sign({email:decode.email,role:decode.role},JWTEMPLOYE,{expiresIn:3600})
           success(res,{tokenNew:refreshtoken}, 'Success refresh token')
         }else{
           failed(res,[],'Failed refresh token')
