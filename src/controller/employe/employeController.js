@@ -17,10 +17,8 @@ module.exports = {
   },
   getDetailController : async (req,res) => {
     const id = req.params.id
-    console.log(id);
     try {
       const DetailEmploye = await getDetailEmploye(id)
-      console.log(DetailEmploye);
       success(res, DetailEmploye, 'Success get detail data Employe')
     } catch (error) {
       errorServer(res, [], error.message)
@@ -42,7 +40,7 @@ module.exports = {
             // Success
             const refreshtoken = jwt.sign({email:email,role:role}, JWT_REFRESH)
             UpdateRefreshToken(refreshtoken, idEmployeDb)
-             jwt.sign({email:email,role:role},JWTEMPLOYE,{expiresIn:'30s'}, (err,tokenacc) => {
+             jwt.sign({email:email,role:role},JWTEMPLOYE,{expiresIn:3600}, (err,tokenacc) => {
               success(res, {id:idEmployeDb,role:role,tokenacc,refreshtoken:refreshtoken}, 'Success')
             })
          }else{
@@ -76,10 +74,9 @@ module.exports = {
       if(token) {
         jwt.verify(token, JWTEMPLOYE, async (err, decode) => {
           if(err) {
-            console.log(err)
+            failed(res,[],err.message)
           } else {
             const email = decode.email
-            console.log(email)
              await verification(email)
              res.render("index", { email });
             //  success(res, data, 'activated email success')
@@ -95,7 +92,7 @@ module.exports = {
     if (newToken) {
       jwt.verify(newToken,JWT_REFRESH, (err,decode) => {
         if (decode.role===0) {
-          const refreshtoken = jwt.sign({email:decode.email,role:decode.role},JWTEMPLOYE,{expiresIn:'30s'})
+          const refreshtoken = jwt.sign({email:decode.email,role:decode.role},JWTEMPLOYE,{expiresIn:3600})
           success(res,{tokenNew:refreshtoken}, 'Success refresh token')
         }else{
           failed(res,[],'Failed refresh token')

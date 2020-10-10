@@ -22,17 +22,6 @@ module.exports = {
       })
     })
   },
-  verification: (email) => {
-    return new Promise((resolve, reject) => {
-      db.query(`UPDATE employe set status = 1 WHERE email = '${email}'`, (err, result) => {
-        if(err){
-          reject(err)
-        } else {
-          resolve(result)
-        }
-      })
-    })
-  },
   register: (data) => {
     return new Promise((resolve, reject) => {
       db.query(`INSERT INTO recruiter (name_recruiter, email_recruiter, company_name, position, phone_number, password, status) VALUES ('${data.name_recruiter}','${data.email_recruiter}','${data.company_name}','${data.position}','${data.phone_number}','${data.password}', 0)`, (err, result) => {
@@ -53,6 +42,7 @@ module.exports = {
   },
   updateStatus: (email) => {
     return new Promise((resolve, reject) => {
+      
       db.query(`UPDATE recruiter SET status = 1 WHERE email_recruiter='${email}'`, (err, result) => {
         if (err) {
           reject(new Error(err))

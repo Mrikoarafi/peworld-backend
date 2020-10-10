@@ -18,7 +18,6 @@ module.exports = {
   },
   getDetailController : async (req,res) => {
     const id = req.params.id
-    console.log(id);
     try {
       const DetailRecruiter = await getDetailRecruiter(id)
       success(res, DetailRecruiter, 'Success get detail data Recruiter')

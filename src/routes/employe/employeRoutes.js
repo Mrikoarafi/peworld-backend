@@ -12,6 +12,6 @@ router
 .post('/register', register ) 
 .post('/refreshtoken', refreshtoken ) 
 .put('/logout/:id', logoutController ) 
-.delete('/delete/:id', deleteController ) 
+.delete('/delete/:id',authentikasi,employe, deleteController ) 
 
 module.exports = router
