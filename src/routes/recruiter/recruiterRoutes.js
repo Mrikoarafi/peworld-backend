@@ -2,9 +2,11 @@ const express = require('express')
 const router = express.Router()
 
 // Call Controller
-const {getAllControllerRecruiter} = require('../../controller/recruiter/recruiterController')
+const recruiterController = require('../../controller/recruiter/recruiterController')
 
 router
-.get('/getAll', getAllControllerRecruiter)
+.get('/getAll', recruiterController.getAllControllerRecruiter)
+.post('/register', recruiterController.register)
+.get('/verify/:token', recruiterController.verify)
 
 module.exports = router

@@ -23,7 +23,7 @@ const response = {
 
     errorServer: (res, data, message) => {
       const result = {
-          success: true,
+          success: false,
           code: 500,
           status: 'ERROR',
           message: message,
