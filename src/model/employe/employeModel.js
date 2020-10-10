@@ -18,7 +18,7 @@ module.exports = {
   },
   verification: (email) => {
     return new Promise((resolve, reject) => {
-      db.query(`UPDATE employe set status = 1 WHERE email = '${email}'`, (err, result) => {
+      db.query(`UPDATE employe set status = 1, image_employe = 'default.jpg' WHERE email = '${email}'`, (err, result) => {
         if(err){
           reject(err)
         } else {

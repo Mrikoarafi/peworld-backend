@@ -8,8 +8,8 @@ module.exports = {
     var transporter = nodemailer.createTransport({
       service: "gmail",
       auth: {
-        user: "hacker0001223@gmail.com",
-        pass: "ammarpedia123",
+        user: EMAIL,
+        pass: PASSWORD,
       },
     });
     const link = `http://localhost:3000/employe/register/${isjwt}`;
