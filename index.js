@@ -11,6 +11,8 @@ const {
 const path = require('path')
 const ejs = require('ejs')
 
+app.use(cors());
+app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'src/views'))
 app.set('view engine', 'ejs')
 
@@ -22,8 +24,6 @@ app.use(
 
 app.use('/employe', employeRoutes)
 app.use('/hire/recruiter', recruiterRoutes)
-app.use(bodyParser.json());
-app.use(cors());
 app.use(express.static("src/img"));
 
 
