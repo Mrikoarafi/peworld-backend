@@ -17,10 +17,8 @@ module.exports = {
   },
   getDetailController : async (req,res) => {
     const id = req.params.id
-    console.log(id);
     try {
       const DetailEmploye = await getDetailEmploye(id)
-      console.log(DetailEmploye);
       success(res, DetailEmploye, 'Success get detail data Employe')
     } catch (error) {
       errorServer(res, [], error.message)
@@ -76,10 +74,9 @@ module.exports = {
       if(token) {
         jwt.verify(token, JWTEMPLOYE, async (err, decode) => {
           if(err) {
-            console.log(err)
+            failed(res,[],err.message)
           } else {
             const email = decode.email
-            console.log(email)
              await verification(email)
              res.render("index", { email });
             //  success(res, data, 'activated email success')

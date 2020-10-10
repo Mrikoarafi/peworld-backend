@@ -16,7 +16,6 @@ module.exports = {
       if (err && err.name === 'TokenExpiredError') {
         failed(res,[],'tokenExpired')
       }else if(err && err.name === 'JsonWebTokenError') {
-        console.log(err.name);
         failed(res,[],'Failed authentication')
       }else{
        next()
