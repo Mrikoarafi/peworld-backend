@@ -89,4 +89,44 @@ module.exports = {
   //     `)
   //   })
   // }
+
+  getEmailEmploye: (email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM employe WHERE email='${email}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          if (result.length > 0) {
+            resolve(result)
+          } else {
+            reject('Email not found')
+          }
+        }
+      })
+    })
+  },
+
+  updateUserKey: (userKey, email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`UPDATE employe SET user_key='${userKey}' WHERE email='${email}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
+  newPassword: (password, userKey) => {
+    return new Promise((resolve, reject) => {
+      db.query(`UPDATE employe SET password='${password}', user_key=null WHERE user_key='${userKey}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  }
 }
