@@ -28,8 +28,8 @@ module.exports = {
     });
     
   },
-  sendEmailRecruiter: (email) => {
-    const token = jwt.sign({ email: email}, JWTRECRUITER)
+  sendEmailRecruiter: (email,id) => {
+    const token = jwt.sign({ email: email,id:id}, JWTRECRUITER)
 
     const output = `
           <center><h3>Hello ${email}</h3>

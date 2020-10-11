@@ -29,12 +29,13 @@ module.exports = {
     const body = req.body
     try {
       const employe = await loginModelEmploye (body)
-      const statusDb = employe[0].status
-      const PassDb = employe[0].password
-      const email = employe[0].email
-      const idEmployeDb = employe[0].id_employe
-      const role = 0
-      if (employe) {
+      console.log(employe);
+      if (employe.length>0) {
+        const statusDb = employe[0].status
+        const PassDb = employe[0].password
+        const email = employe[0].email
+        const idEmployeDb = employe[0].id_employe
+        const role = 0
         if (statusDb!==0) {
           const matchPass = await bcrypt.compare(body.password,PassDb)
           if (matchPass) {

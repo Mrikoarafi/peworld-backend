@@ -8,6 +8,7 @@ router
 .get('/getAll', authentikasi,employe,getAllControllerEmploye)
 .get('/getDetail/:id', getDetailController)
 .get('/register/:token', verification ) 
+// .put('/updateEmploye/:id', editProfileEmploye ) 
 .post('/login', loginController)
 .post('/register', register ) 
 .post('/refreshtoken', refreshtoken ) 

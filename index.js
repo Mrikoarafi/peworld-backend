@@ -11,6 +11,7 @@ const {
 const path = require('path')
 const ejs = require('ejs')
 
+app.use(express.static("src/img"));
 app.use(cors());
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'src/views'))
@@ -24,7 +25,6 @@ app.use(
 
 app.use('/employe', employeRoutes)
 app.use('/hire/recruiter', recruiterRoutes)
-app.use(express.static("src/img"));
 
 
 app.listen(PORT, () => {
