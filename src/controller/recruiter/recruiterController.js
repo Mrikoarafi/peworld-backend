@@ -109,4 +109,50 @@ module.exports = {
       errorServer(res,[],error.message)      
     }
   },
+
+  forgetPassword: (req, res) => {
+    try {
+      const body = req.body
+      const email = body.email
+
+      recruiterModel.getEmailRecruiter(email).then((result) => {
+        const userKey = jwt.sign({ email: email }, JWTRECRUITER)
+
+        recruiterModel.updateUserKey(userKey, email).then((result) => {
+          success(res, result, 'Please check your email for password reset')
+          sendEmail.sendEmailForgotRecruiter(email, userKey)
+        }).catch((err) => {
+          failed(res, [], err.message)
+        })
+      }).catch((err) => {
+        failed(res, [], err.message)
+      })
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
+
+  resetPassword: async (req, res) => {
+    try {
+      const body = req.body
+
+      const userKey = req.body.userKey
+
+      if (!userKey) {
+        failed(res, [], 'User key not found')
+      } else {
+        const pwd = body.password
+        const salt = await bcrypt.genSalt(10)
+        const pwdHash = await bcrypt.hash(pwd, salt)
+
+        recruiterModel.newPassword(pwdHash, userKey).then((result) => {
+          success(res, result, 'Reset Password Success')
+        }).catch((err) => {
+          failed(res, [], err.message)
+        })
+      }
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  }
 }

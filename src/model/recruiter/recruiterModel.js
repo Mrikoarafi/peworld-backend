@@ -40,10 +40,45 @@ module.exports = {
       })
     })
   },
-  updateStatus: (email) => {
+  updateStatus: (email, id_recruiter) => {
     return new Promise((resolve, reject) => {
-      
       db.query(`UPDATE recruiter SET status = 1 WHERE email_recruiter='${email}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          resolve(result)
+          db.query(`INSERT INTO company (id_recruiter) VALUES ('${id_recruiter}')`, (err, result) => {
+            if (err) {
+              reject(new Error(err))
+            } else {
+              resolve(result)
+            }
+          })
+        }
+      })
+    })
+  },
+
+  // forget password
+  getEmailRecruiter: (email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM recruiter WHERE email_recruiter='${email}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          if (result.length > 0) {
+            resolve(result)
+          } else {
+            reject('Email not found')
+          }
+        }
+      })
+    })
+  },
+
+  updateUserKey: (userKey, email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`UPDATE recruiter SET user_key='${userKey}' WHERE email_recruiter='${email}'`, (err, result) => {
         if (err) {
           reject(new Error(err))
         } else {
@@ -51,5 +86,29 @@ module.exports = {
         }
       })
     })
-  }
+  },
+
+  newPassword: (password, userKey) => {
+    return new Promise((resolve, reject) => {
+      db.query(`UPDATE recruiter SET password='${password}', user_key=null WHERE user_key='${userKey}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
+
+  // resetKey: (email) => {
+  //   return new Promise((resolve, result) => {
+  //     db.query(`UPDATE recruiter SET user_key=null WHERE email='${email}'`, (err, result) => {
+  //       if (err) {
+  //         reject(new Error(err))
+  //       } else {
+  //         resolve(result)
+  //       }
+  //     })
+  //   })
+  // }
 }
