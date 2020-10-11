@@ -1,11 +1,25 @@
 // Call Model
-const {getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel} = require('../../model/employe/employeModel')
+const {
+  getAllModelEmploye,
+  getDetailEmploye,
+  loginModelEmploye,
+  register,
+  verification,
+  UpdateRefreshToken,
+  logoutModel,
+  deleteModel,
+  updateEmploye,
+  insertExpreience,
+  insertPortofolio,
+  inseertSkill,
+} = require("../../model/employe/employeModel");
 // Call Response
 const {success,failed,errorServer} = require('../../helper/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {sendEmailEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
+const uploadsingle = require('../../helper/upload')
 
 module.exports = {
   getAllControllerEmploye: async (req,res) => {
@@ -119,6 +133,41 @@ module.exports = {
       success(res,deleteEmploye,'Delete Employe success')
     } catch (error) {
       errorServer(res,[],error.message)      
+    }
+  },
+  updateandinsert: async (req,res) => {
+    try {
+            const {id} = req.params
+             const {name, jobdesk,domisili , email, workplace, description, instagram, insert, github, linkedin, work_experience, phone_number, portfolio, skill} = req.body
+            //  console.log(work_experience)
+             await updateEmploye(name, jobdesk,domisili , email, workplace, description, instagram, github, linkedin, phone_number, id)
+             const skill2 = skill.map( async (dt) => {
+                const id = dt.id_employe
+                const name = dt.name_skill
+                await inseertSkill(name, id)
+             })
+           const insert1 = work_experience.map( async (dt) => {
+              try {
+                const position = dt.position
+              const company_name = dt.company_name
+              const month_year = dt.month_year
+              const description = dt.description
+              const id_employe = dt.id_employe
+             await insertExpreience(position, company_name, month_year, description, id_employe)
+              } catch (error) {
+               return res.send(error.message)
+              }
+            })
+          Promise.all([insert1, skill2]).then((resolve)=>{
+              res.send({
+               message: "berhasil insert update and edit databasse"
+             })
+            }).catch((err) =>{
+              res.send(err.message)
+            }) 
+    } catch (error) {
+      res.send(error.message)
+      
     }
   }
 
