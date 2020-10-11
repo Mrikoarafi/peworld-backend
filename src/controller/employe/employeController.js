@@ -13,6 +13,7 @@ const {
   insertPortofolio,
   inseertSkill,
 } = require("../../model/employe/employeModel");
+// const {getEmailEmploye,getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,updateUserKey,newPassword} = require('../../model/employe/employeModel')
 // Call Response
 const {success,failed,errorServer} = require('../../helper/response')
 const bcrypt = require('bcrypt')
@@ -43,12 +44,13 @@ module.exports = {
     const body = req.body
     try {
       const employe = await loginModelEmploye (body)
-      const statusDb = employe[0].status
-      const PassDb = employe[0].password
-      const email = employe[0].email
-      const idEmployeDb = employe[0].id_employe
-      const role = 0
-      if (employe) {
+      console.log(employe);
+      if (employe.length>0) {
+        const statusDb = employe[0].status
+        const PassDb = employe[0].password
+        const email = employe[0].email
+        const idEmployeDb = employe[0].id_employe
+        const role = 0
         if (statusDb!==0) {
           const matchPass = await bcrypt.compare(body.password,PassDb)
           if (matchPass) {
@@ -169,6 +171,49 @@ module.exports = {
       res.send(error.message)
       
     }
-  }
+  },
+  forgetPassword: (req, res) => {
+    try {
+      const body = req.body
+      const email = body.email
 
+      getEmailEmploye(email).then((result) => {
+        const userKey = jwt.sign({ email: email }, JWTEMPLOYE)
+
+        updateUserKey(userKey, email).then((result) => {
+          success(res, result, 'Please check your email for password reset')
+          sendEmailForgotEmploye(email, userKey)
+        }).catch((err) => {
+          failed(res, [], err.message)
+        })
+      }).catch((err) => {
+        failed(res, [], err.message)
+      })
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
+
+  resetPassword: async (req, res) => {
+    try {
+      const body = req.body
+      const userKey = req.body.userKey
+
+      if (!userKey) {
+        failed(res, [], 'User key not found')
+      } else {
+        const pwd = body.password
+        const salt = await bcrypt.genSalt(10)
+        const pwdHash = await bcrypt.hash(pwd, salt)
+
+        newPassword(pwdHash, userKey).then((result) => {
+          success(res, result, 'Reset password success')
+        }).catch((err) => {
+          failed(res, [], err.message)
+        })
+      }
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  }
 }

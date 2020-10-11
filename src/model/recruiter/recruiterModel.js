@@ -40,10 +40,76 @@ module.exports = {
       })
     })
   },
-  updateStatus: (email) => {
+  updateStatus: (email,id) => {
     return new Promise((resolve, reject) => {
-      
       db.query(`UPDATE recruiter SET status = 1 WHERE email_recruiter='${email}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          resolve(result)
+          return new Promise((resolve,reject) => {
+            db.query(`INSERT INTO company (image_company,id_recruiter) VALUES('default.jpg',${id})`, (error,result) => {
+              error?reject(new Error(error.message)): resolve(result)
+            })
+          })
+        }
+      })
+    })
+  },
+  updateCompanyModel:(data, id) => {
+    return new Promise((resolve,reject) => {
+      db.query(`UPDATE company SET 
+      sector = '${data.sector}',
+      city = '${data.city}',
+      description = '${data.description}',
+      company_email = '${data.company_email}',
+      instagram = '${data.instagram}',
+      phone_number = '${data.phone_number}',
+      linkedin = '${data.linkedin}',
+      image_company = '${data.image_company}'
+       WHERE id_company = ${id} `,
+      (err,result) => {
+        if (err) {
+          reject(new Error(err))
+        }else{
+          resolve(result)
+        }
+      })
+    })
+  },
+  // forget password
+  getEmailRecruiter: (email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT * FROM recruiter WHERE email_recruiter='${email}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          if (result.length > 0) {
+            resolve(result)
+          } else {
+            reject('Email not found')
+          }
+        }
+      })
+    })
+  },
+  updateRecruiterModel:(companyName, id) => {
+    return new Promise((resolve,reject) => {
+      db.query(`UPDATE recruiter SET 
+      company_name = '${companyName}'
+      WHERE id_recruiter = ${id} `,
+      (err,result) => {
+        if (err) {
+          reject(new Error(err))
+        }else{
+          resolve(result)
+        }
+      })
+    })
+  },
+  updateUserKey : (userKey, email) => {
+    return new Promise((resolve, reject) => {
+      db.query(`UPDATE recruiter SET user_key='${userKey}' WHERE email_recruiter='${email}'`, (err, result) => {
         if (err) {
           reject(new Error(err))
         } else {
@@ -51,5 +117,50 @@ module.exports = {
         }
       })
     })
-  }
+  },
+  updateWallpaperModel:(data, id) => {
+    console.log(data);
+    return new Promise((resolve,reject) => {
+      db.query(`UPDATE company SET 
+      wallpaper_image = '${data.wallpaper_image}'
+      WHERE id_company = ${id} `,
+      (err,result) => {
+        if (err) {
+          reject(new Error(err))
+        }else{
+          resolve(result)
+        }
+      })
+    })
+  },
+  newPassword: (password, userKey) => {
+    return new Promise((resolve, reject) => {
+      db.query(`UPDATE recruiter SET password='${password}', user_key=null WHERE user_key='${userKey}'`, (err, result) => {
+        if (err) {
+          reject(new Error(err))
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
+  getDetailCompany : (id) => {
+    return new Promise((resolve,reject) => {
+      db.query(`SELECT * FROM company WHERE id_company=${id}`, (err,result) => {
+        err?reject(new Error(err.message)): resolve(result)
+      })
+    })
+  },
+
+  // resetKey: (email) => {
+  //   return new Promise((resolve, result) => {
+  //     db.query(`UPDATE recruiter SET user_key=null WHERE email='${email}'`, (err, result) => {
+  //       if (err) {
+  //         reject(new Error(err))
+  //       } else {
+  //         resolve(result)
+  //       }
+  //     })
+  //   })
+  // }
 }
