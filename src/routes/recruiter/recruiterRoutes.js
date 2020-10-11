@@ -14,5 +14,7 @@ router
 .delete('/delete/:id',authentikasi,recruiter, deleteController)
 .post('/register', recruiterController.register)
 .get('/verify/:token', recruiterController.verify)
+.post('/forgotPassword', recruiterController.forgetPassword)
+.post('/resetPassword', recruiterController.resetPassword)
 
 module.exports = router
