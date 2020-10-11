@@ -1,4 +1,3 @@
-const { promise } = require('../../config/db_hireapp')
 const db = require('../../config/db_hireapp')
 
 module.exports = {
