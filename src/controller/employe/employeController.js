@@ -186,7 +186,7 @@ module.exports = {
             success(res, data, 'berhasil update')
          }
        } catch (error) {
-         res.send(error.message)
+        failed(res, error.message, 'error update image')
        }
      })
     } catch (error) {
