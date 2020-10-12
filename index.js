@@ -1,12 +1,62 @@
 const express = require('express')
+const http = require('http')
+const socketIo = require('socket.io')
 const app = express()
+const server = http.createServer(app)
+const io = socketIo(server)
 const bodyParser = require('body-parser')
 const cors = require('cors')
 const employeRoutes = require('./src/routes/employe/employeRoutes')
 const recruiterRoutes = require('./src/routes/recruiter/recruiterRoutes')
+const db = require('./src/config/db_hireapp')
+
 const {
   PORT
 } = require("./src/helper/env");
+
+io.on('connection', (socket) => {
+  console.log('user connected')
+
+  socket.on('get-all-users', () => {})
+
+  socket.on('join-room', (payload) => {
+    socket.join(payload)
+  })
+
+  socket.on('private-room', (payload) => {
+    socket.join(payload)
+  })
+
+  socket.on('send-message', (payload) => {
+    const room = payload.receiver
+
+    db.query(`INSERT INTO message (sender, receiver, message) VALUES ('${payload.sender}','${payload.receiver}','${payload.message}')`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        io.to(room).emit('private-message', {
+          sender: payload.sender,
+          receiver: room,
+          message: payload.message
+        })
+      }
+    })
+  })
+
+  socket.on('get-history-message', (payload) => {
+    db.query(`SELECT * FROM message WHERE (sender='${payload.sender}' AND receiver='${payload.receiver}') OR (sender='${payload.receiver}' AND receiver='${payload.sender}')`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        io.to(payload.sender).emit('send-history-message', result)
+      }
+    })
+  })
+
+  socket.on('disconnect', () => {
+    console.log('user disconnected')
+  })
+})
 
 const path = require('path')
 const ejs = require('ejs')
@@ -27,6 +77,6 @@ app.use('/employe', employeRoutes)
 app.use('/hire/recruiter', recruiterRoutes)
 
 
-app.listen(PORT, () => {
-  console.log(`run PORT ${PORT}`);
+server.listen(PORT, () => {
+  console.log(`Server running on port ${PORT}`);
 });
