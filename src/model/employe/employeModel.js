@@ -118,6 +118,17 @@ module.exports = {
       );
     });
   },
+  updateEmployeimage: (image, id) => {
+    return new Promise((resolve, reject) => {
+      db.query(` UPDATE employe set image_employe = '${image}' WHERE id_employe = ${id}`, (err, result) => {
+        if(err) {
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
   insertExpreience: (
     position,
     company_name,
@@ -161,6 +172,8 @@ module.exports = {
   inseertSkill: (name, id) => {
     return new Promise((resolve, reject) => {
       db.query(`INSERT INTO skills (name_skill, id_employe) VALUES('${name}', ${id})`, (err,result) => {
+        console.log(err)
+        console.log(result)
         if(err) {
           reject(err)
         } else {

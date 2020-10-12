@@ -2,7 +2,19 @@ const express = require('express')
 const router = express.Router()
 
 // Call Controller
-const {getAllControllerEmploye,getDetailController,loginController,register,verification,refreshtoken,logoutController,deleteController, updateandinsert, profilEdit} = require('../../controller/employe/employeController')
+const {
+  getAllControllerEmploye,
+  getDetailController,
+  loginController,
+  register,
+  verification,
+  refreshtoken,
+  logoutController,
+  deleteController,
+  updateandinsert,
+  profilEdit,
+  imageedit,
+} = require("../../controller/employe/employeController");
 const {authentikasi,employe,recruiter } = require('../../helper/authentikasi')
 router
   .get("/getAll", authentikasi, employe, getAllControllerEmploye)
@@ -16,6 +28,7 @@ router
   // edit profilie
   .put("/edit/:id", updateandinsert)
   .post("/portofolio", profilEdit)
+  .put("/image/:id", imageedit)
   //end edit profile
   .get("/getAll", authentikasi, employe, getAllControllerEmploye)
   .get("/getDetail/:id", getDetailController)

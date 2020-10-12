@@ -12,6 +12,7 @@ const {
   insertExpreience,
   insertPortofolio,
   inseertSkill,
+  updateEmployeimage,
 } = require("../../model/employe/employeModel");
 // const {getEmailEmploye,getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,updateUserKey,newPassword} = require('../../model/employe/employeModel')
 // Call Response
@@ -21,6 +22,8 @@ const jwt = require('jsonwebtoken')
 const {sendEmailEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
 const upload = require('../../helper/uploadEmploye')
+const path = require('path')
+const fs = require('fs-extra')
 
 module.exports = {
   getAllControllerEmploye: async (req,res) => {
@@ -148,7 +151,7 @@ module.exports = {
                 const name = dt.name_skill
                 await inseertSkill(name, id)
              })
-           const insert1 = work_experience.map( async (dt) => {
+           const insert1 = work_experience.map(async (dt) => {
               try {
                 const position = dt.position
               const company_name = dt.company_name
@@ -237,6 +240,37 @@ module.exports = {
       }
     } catch (error) {
       errorServer(res, [], error.message)
+    }
+  },
+  imageedit: (req, res) => {
+    try {
+      upload.uploadsingle(req,res, async (err) => {
+        try {
+          if(err) {
+            res.send({
+              message: err
+            })
+          } else {
+            const {id} = req.params
+            const image = req.file.filename
+            const data2 = await getDetailEmploye(id)
+            const img = data2[0].image_employe
+            console.log(img === image)
+            if(img) {
+              const data = await updateEmployeimage(image, id)
+              await fs.unlink(path.join(`public/images/${img}`));
+             res.send(data)
+            } else {
+              await updateEmployeimage(image, id)
+              success(res, data, 'berhasil update image sob' )
+            }
+          }
+        } catch (error) {
+          failed(res, error.message, "update failed")
+        }
+      })
+    } catch (error) {
+      failed(res, error.message, "failed update")
     }
   }
 }
