@@ -20,7 +20,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {sendEmailEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
-const upload = require('../../helper/upload')
+const upload = require('../../helper/uploadEmploye')
 
 module.exports = {
   getAllControllerEmploye: async (req,res) => {
