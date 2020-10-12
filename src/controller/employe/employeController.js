@@ -1,11 +1,30 @@
 // Call Model
-const {getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,getWorkExperience,getSkill,getPortfolio} = require('../../model/employe/employeModel')
+const {getWorkExperience,getSkill,getPortfolio} = require('../../model/employe/employeModel')
+const {
+  getAllModelEmploye,
+  getDetailEmploye,
+  loginModelEmploye,
+  register,
+  verification,
+  UpdateRefreshToken,
+  logoutModel,
+  deleteModel,
+  updateEmploye,
+  insertExpreience,
+  insertPortofolio,
+  inseertSkill,
+  updateEmployeimage,
+} = require("../../model/employe/employeModel");
+// const {getEmailEmploye,getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,updateUserKey,newPassword} = require('../../model/employe/employeModel')
 // Call Response
 const {success,failed,errorServer,dataTable} = require('../../helper/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {sendEmailEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
+const upload = require('../../helper/uploadEmploye')
+const path = require('path')
+const fs = require('fs-extra')
 
 module.exports = {
   getAllControllerEmploye: async (req,res) => {
@@ -165,6 +184,140 @@ module.exports = {
     } catch (error) {
       errorServer(res,[],error.message)      
     }
-  }
+  },
+  updateandinsert: async (req,res) => {
+    try {
+            const {id} = req.params
+             const {name, jobdesk,domisili , email, workplace, description, instagram, insert, github, linkedin, work_experience, phone_number, portfolio, skill} = req.body
+            //  console.log(work_experience)
+             await updateEmploye(name, jobdesk,domisili , email, workplace, description, instagram, github, linkedin, phone_number, id)
+             const skill2 = skill.map( async (dt) => {
+                const id = dt.id_employe
+                const name = dt.name_skill
+                await inseertSkill(name, id)
+             })
+           const insert1 = work_experience.map(async (dt) => {
+              try {
+                const position = dt.position
+              const company_name = dt.company_name
+              const month_year = dt.month_year
+              const description = dt.description
+              const id_employe = dt.id_employe
+             await insertExpreience(position, company_name, month_year, description, id_employe)
+              } catch (error) {
+               return res.send(error.message)
+              }
+            })
+          Promise.all([insert1, skill2]).then((resolve)=>{
+              res.send({
+               message: "berhasil insert update and edit databasse"
+             })
+            }).catch((err) =>{
+              res.send(err.message)
+            }) 
+    } catch (error) {
+      res.send(error.message)
+      
+    }
+  },
+  profilEdit: (req, res) => {
+    try {
+      upload.uploadsingle(req,res, async (err) =>{
+        try {
+          if(err) {
+            res.send({
+              message: err
+            })
+          } else {
+            const {apk_name, link_repo, type_portofolio, id_employe} = req.body
+            const image = req.file.filename
+            console.log(apk_name, link_repo, type_portofolio, id_employe)
+           const data =  await insertPortofolio(apk_name, link_repo, type_portofolio, image, id_employe)
+            success(res, data, 'berhasil update')
+         }
+       } catch (error) {
+        failed(res, error.message, 'error update image')
+       }
+     })
+    } catch (error) {
+      
+    }
+  },
+  forgetPassword: (req, res) => {
+    try {
+      const body = req.body
+      const email = body.email
 
+      getEmailEmploye(email).then((result) => {
+        const userKey = jwt.sign({ email: email }, JWTEMPLOYE)
+
+        updateUserKey(userKey, email).then((result) => {
+          success(res, result, 'Please check your email for password reset')
+          sendEmailForgotEmploye(email, userKey)
+        }).catch((err) => {
+          failed(res, [], err.message)
+        })
+      }).catch((err) => {
+        failed(res, [], err.message)
+      })
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
+
+  resetPassword: async (req, res) => {
+    try {
+      const body = req.body
+      const userKey = req.body.userKey
+
+      if (!userKey) {
+        failed(res, [], 'User key not found')
+      } else {
+        const pwd = body.password
+        const salt = await bcrypt.genSalt(10)
+        const pwdHash = await bcrypt.hash(pwd, salt)
+
+        newPassword(pwdHash, userKey).then((result) => {
+          success(res, result, 'Reset password success')
+        }).catch((err) => {
+          failed(res, [], err.message)
+        })
+      }
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
+  imageedit: (req, res) => {
+    try {
+      upload.uploadsingle(req,res, async (err) => {
+        try {
+          if(err) {
+            res.send({
+              message: err
+            })
+          } else {
+            const {id} = req.params
+            const image = req.file.filename
+            const data2 = await getDetailEmploye(id)
+            const img = data2[0].image_employe
+            if (img && img !== "default.jpg") {
+              const data = await updateEmployeimage(image, id);
+              await fs.unlink(path.join(`public/images/${img}`));
+              res.send(data);
+            } else if (img === "default.jpg") {
+              const data = await updateEmployeimage(image, id);
+              success(res, data, "berhasil update image sob");
+            } else {
+              await updateEmployeimage(image, id);
+              success(res, data, "berhasil update image sob");
+            }
+          }
+        } catch (error) {
+          failed(res, error.message, "update failed")
+        }
+      })
+    } catch (error) {
+      failed(res, error.message, "failed update")
+    }
+  }
 }

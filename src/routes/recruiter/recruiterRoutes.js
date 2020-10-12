@@ -11,7 +11,7 @@ router
 .put('/updateCompany/:id', updateCompany)
 .put('/updateWallpaper/:id', updateWallpaper)
 .post('/login', loginController)
-.delete('/delete/:id',authentikasi,recruiter, deleteController)
+.delete('/delete/:id', deleteController)
 .post('/register', recruiterController.register)
 .get('/verify/:token', recruiterController.verify)
 .post('/forgotPassword', recruiterController.forgetPassword)

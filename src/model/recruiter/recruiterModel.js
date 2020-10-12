@@ -3,7 +3,7 @@ const db = require('../../config/db_hireapp')
 module.exports = {
 getAllModelRecruiter : () => {
   return new Promise((resolve,reject) => {
-    db.query(`SELECT * FROM recruiter`, (err,result) => {
+    db.query(`SELECT recruiter.id_recruiter,recruiter.name_recruiter,recruiter.email_recruiter,recruiter.company_name,recruiter.position,recruiter.phone_number,recruiter.created_at FROM recruiter`, (err,result) => {
       err?reject(new Error(err.message)): resolve(result)
     })
   })
@@ -151,3 +151,4 @@ getDetailCompany : (id) => {
   })
 },
 }
+
