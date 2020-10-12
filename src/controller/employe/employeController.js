@@ -255,14 +255,16 @@ module.exports = {
             const image = req.file.filename
             const data2 = await getDetailEmploye(id)
             const img = data2[0].image_employe
-            console.log(img === image)
-            if(img) {
-              const data = await updateEmployeimage(image, id)
+            if (img && img !== "default.jpg") {
+              const data = await updateEmployeimage(image, id);
               await fs.unlink(path.join(`public/images/${img}`));
-             res.send(data)
+              res.send(data);
+            } else if (img === "default.jpg") {
+              const data = await updateEmployeimage(image, id);
+              success(res, data, "berhasil update image sob");
             } else {
-              await updateEmployeimage(image, id)
-              success(res, data, 'berhasil update image sob' )
+              await updateEmployeimage(image, id);
+              success(res, data, "berhasil update image sob");
             }
           }
         } catch (error) {
