@@ -150,5 +150,12 @@ getDetailCompany : (id) => {
     })
   })
 },
+getDetailCompany2 : (id) => {
+  return new Promise((resolve,reject) => {
+    db.query(`SELECT * FROM company WHERE id_recruiter=${id}`, (err,result) => {
+      err?reject(new Error(err.message)): resolve(result)
+    })
+  })
+}
 }
 
