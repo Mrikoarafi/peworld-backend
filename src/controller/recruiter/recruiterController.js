@@ -74,7 +74,7 @@ module.exports = {
           if (matchPass) {
             // Success
               jwt.sign({email:email,role:role},JWTRECRUITER, (err,tokenacc) => {
-                success(res, {id:idRecruiterDb,role:role,tokenacc}, 'Success')
+                success(res, {id:idRecruiterDb,email:email,role:role,tokenacc}, 'Success')
               })
           }else{
             failed(res,[],'Wrong password')
