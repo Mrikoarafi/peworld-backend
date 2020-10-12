@@ -20,7 +20,7 @@ const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {sendEmailEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
-const uploadsingle = require('../../helper/upload')
+const upload = require('../../helper/upload')
 
 module.exports = {
   getAllControllerEmploye: async (req,res) => {
@@ -169,6 +169,27 @@ module.exports = {
             }) 
     } catch (error) {
       res.send(error.message)
+      
+    }
+  },
+  profilEdit: (req, res) => {
+    try {
+      upload.uploadsingle(req,res, async (err) =>{
+        try {
+          if(err) {
+            console.log(err)
+          } else {
+            const {apk_name, link_repo, type_portofolio, id_employe} = req.body
+            const image = req.file.filename
+            console.log(apk_name, link_repo, type_portofolio, id_employe)
+           const data =  await insertPortofolio(apk_name, link_repo, type_portofolio, image, id_employe)
+            success(res, data, 'berhasil update')
+         }
+       } catch (error) {
+         res.send(error.message)
+       }
+     })
+    } catch (error) {
       
     }
   },

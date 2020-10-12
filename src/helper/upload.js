@@ -57,6 +57,7 @@ function checkFileType(file, cb) {
 }
 
 module.exports = { uploadMultiple, uploadsingle };
+
 // const multer = require('multer');
 // const {failed} = require('../helper/response')
 // const storage = multer.diskStorage({
