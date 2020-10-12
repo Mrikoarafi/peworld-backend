@@ -177,7 +177,9 @@ module.exports = {
       upload.uploadsingle(req,res, async (err) =>{
         try {
           if(err) {
-            console.log(err)
+            res.send({
+              message: err
+            })
           } else {
             const {apk_name, link_repo, type_portofolio, id_employe} = req.body
             const image = req.file.filename
