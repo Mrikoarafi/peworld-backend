@@ -1,7 +1,7 @@
 // Call Model
-const {getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel} = require('../../model/employe/employeModel')
+const {getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,getWorkExperience,getSkill,getPortfolio} = require('../../model/employe/employeModel')
 // Call Response
-const {success,failed,errorServer} = require('../../helper/response')
+const {success,failed,errorServer,dataTable} = require('../../helper/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
 const {sendEmailEmploye} = require('../../helper/sendEmail')
@@ -9,9 +9,27 @@ const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
 
 module.exports = {
   getAllControllerEmploye: async (req,res) => {
+    const where = !req.query.where?'name':req.query.where
+    const name = !req.query.name?'':req.query.name
+    const orderby = !req.query.orderby?'name_skill':req.query.orderby
+    const sort = !req.query.sort?'asc':req.query.sort
+     // Pagination
+     const jmlhDataPerhalaman = !req.query.limit ? 10 : parseInt(req.query.limit);
+     const pagesActive = !req.query.pages ? 1 : parseInt(req.query.pages);
+     const start = pagesActive === 1 ? 0 : (jmlhDataPerhalaman * pagesActive) - jmlhDataPerhalaman
     try {
-      const getEmploye = await getAllModelEmploye()
-      success(res, getEmploye, 'Success get all data Employe')
+      const getEmploye = await getAllModelEmploye(where,name,orderby,sort,start,jmlhDataPerhalaman)
+      if (getEmploye.length===0) {
+        failed(res,[],'Data not found')
+      }
+      const countData = getEmploye[0].count;
+      const totalPage = Math.ceil(countData / jmlhDataPerhalaman)
+            const coundDatabase = {
+                  totalRow: countData,
+                  totalPage,
+                  pagesActive
+            }
+              dataTable(res, getEmploye, coundDatabase, `Get All data employe Success`)
     } catch (error) {
       errorServer(res, [], error.message)
     }
@@ -25,11 +43,37 @@ module.exports = {
       errorServer(res, [], error.message)
     }
   },
+  getSkillController : async (req,res) => {
+    const id = req.params.id
+    try {
+      const DetailSkill = await getSkill(id)
+      success(res, DetailSkill, 'Success get detail skill Employe')
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
+  getPortfolioController : async (req,res) => {
+    const id = req.params.id
+    try {
+      const DetailEmploye = await getPortfolio(id)
+      success(res, DetailEmploye, 'Success get detail Portfolio Employe')
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
+  getWorkExperienceController : async (req,res) => {
+    const id = req.params.id
+    try {
+      const DetailEmploye = await getWorkExperience(id)
+      success(res, DetailEmploye, 'Success get detail WorkExperience Employe')
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
   loginController : async (req,res) => {
     const body = req.body
     try {
       const employe = await loginModelEmploye (body)
-      console.log(employe);
       if (employe.length>0) {
         const statusDb = employe[0].status
         const PassDb = employe[0].password
@@ -52,7 +96,7 @@ module.exports = {
           failed(res,[],'Employe has not been actived')
         }
        }else{
-         failed(res,[],'Employe has not been registere')
+         failed(res,[],'Employe has not been registered')
        }
       } catch (error) {
         errorServer(res, [], error.message)

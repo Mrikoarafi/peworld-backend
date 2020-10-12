@@ -1,17 +1,39 @@
-const { promise } = require('../../config/db_hireapp')
 const db = require('../../config/db_hireapp')
 
 module.exports = {
-  getAllModelEmploye : () => {
+  getAllModelEmploye : (where,name,orderby,sort,start,end) => {
     return new Promise((resolve,reject) => {
-      db.query(`SELECT * FROM employe`, (err,result) => {
-        err?reject(new Error(err.message)): resolve(result)
+      db.query(`SELECT employe.id_employe,employe.name,employe.jobdesk,employe.domisili,employe.image_employe,GROUP_CONCAT(skills.name_skill) as skill_employe, (SELECT COUNT(*) FROM employe) as count FROM employe
+      JOIN skills ON employe.id_employe=skills.id_employe
+       WHERE ${where} LIKE'%${name}%' GROUP BY(employe.id_employe) ORDER BY ${orderby} ${sort} LIMIT ${start},${end}`, (err,result) => {
+      err?reject(new Error(err.message)): resolve(result);
       })
     })
   },
   getDetailEmploye : (id) => {
     return new Promise((resolve,reject) => {
-      db.query(`SELECT * FROM employe WHERE id_employe=${id}`, (err,result) => {
+      db.query(`SELECT  employe.id_employe,employe.name,employe.email,employe.phone_number,employe.image_employe,employe.jobdesk,employe.domisili,employe.workplace,employe.description,employe.instagram,github,linkedin,employe.created_at FROM employe WHERE id_employe=${id}`, (err,result) => {
+        err?reject(new Error(err.message)): resolve(result)
+      })
+    })
+  },
+  getWorkExperience : (id) => {
+    return new Promise((resolve,reject) => {
+      db.query(`SELECT * FROM work_experience WHERE id_employe=${id}`, (err,result) => {
+        err?reject(new Error(err.message)): resolve(result)
+      })
+    })
+  },
+  getSkill : (id) => {
+    return new Promise((resolve,reject) => {
+      db.query(`SELECT * FROM skills WHERE id_employe=${id}`, (err,result) => {
+        err?reject(new Error(err.message)): resolve(result)
+      })
+    })
+  },
+  getPortfolio : (id) => {
+    return new Promise((resolve,reject) => {
+      db.query(`SELECT * FROM portfolio WHERE id_employe=${id}`, (err,result) => {
         err?reject(new Error(err.message)): resolve(result)
       })
     })
@@ -74,19 +96,4 @@ module.exports = {
       })
     })
   },
-  // updateEmploye : (data,id) => {
-  //   return new promise((resolve,reject) => {
-  //     db.query(`UPDATE employe SET 
-  //     jobdesk='${data.jobdesk}',
-  //     domisili='${data.domisili}',
-  //     workplace='${data.workplace}',
-  //     description='${data.description}',
-  //     instagram='${data.instagram}',
-  //     github='${data.github}',
-  //     linkedin='${data.linkedin}'
-  //     WHERE id_employe='${id}'
-      
-  //     `)
-  //   })
-  // }
 }

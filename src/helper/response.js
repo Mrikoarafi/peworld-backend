@@ -31,5 +31,15 @@ const response = {
       }
       res.status(500).json(result);
   },
+  dataTable: (res, data, tableRow, message) => {
+    const result = {
+        message,
+        code: 200,
+        status: 'OK',
+        tableRow,
+        data
+    }
+    res.json(result)
+},
 }
 module.exports = response

@@ -65,7 +65,6 @@ module.exports = {
       const recruiter = await loginModelRecruiter (body)
       if (recruiter.length>0) {
         const status = recruiter[0].status
-        console.log(recruiter);
           if (status!==0) {
             const PassDb = recruiter[0].password
         const email = recruiter[0].email_recruiter
@@ -181,7 +180,7 @@ updateWallpaper:  (req,res) => {
         const dataCompany = await getDetailCompany(id)
         const newImage = body.wallpaper_image
         const {wallpaper_image} = body
-        if (wallpaper_image !=='') {
+        if (wallpaper_image !==''||wallpaper_image!==null) {
           if (newImage) {
             //     // With Image
             if (dataCompany[0].wallpaper_image==='' || dataCompany[0].wallpaper_image===null) {

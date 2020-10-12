@@ -6,7 +6,7 @@ const {getAllControllerRecruiter,getDetailController,loginController,deleteContr
 const {authentikasi,recruiter} = require('../../helper/authentikasi')
 const recruiterController = require('../../controller/recruiter/recruiterController')
 router
-.get('/getAll',authentikasi,recruiter, getAllControllerRecruiter)
+.get('/getAll', getAllControllerRecruiter)
 .get('/getDetail/:id', getDetailController)
 .put('/updateCompany/:id', updateCompany)
 .put('/updateWallpaper/:id', updateWallpaper)
