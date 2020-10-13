@@ -245,7 +245,7 @@ module.exports = {
             const image = req.file.filename
             console.log(apk_name, link_repo, type_portofolio, id_employe)
            const data =  await insertPortofolio(apk_name, link_repo, type_portofolio, image, id_employe)
-            success(res, data, 'berhasil update')
+            success(res, data, 'berhasil insert')
          }
        } catch (error) {
         failed(res, error.message, 'error update image')
