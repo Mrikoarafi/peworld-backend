@@ -6,15 +6,16 @@ const {getAllControllerRecruiter,getDetailController,loginController,deleteContr
 const {authentikasi,recruiter} = require('../../helper/authentikasi')
 const recruiterController = require('../../controller/recruiter/recruiterController')
 router
-.get('/getAll',authentikasi,recruiter, getAllControllerRecruiter)
+.get('/getAll', getAllControllerRecruiter)
 .get('/getDetail/:id', getDetailController)
 .put('/updateCompany/:id', updateCompany)
 .put('/updateWallpaper/:id', updateWallpaper)
 .post('/login', loginController)
-.delete('/delete/:id',authentikasi,recruiter, deleteController)
+.delete('/delete/:id', deleteController)
 .post('/register', recruiterController.register)
 .get('/verify/:token', recruiterController.verify)
 .post('/forgotPassword', recruiterController.forgetPassword)
 .post('/resetPassword', recruiterController.resetPassword)
+// .get('/detailMessage/:receiver', recruiterController.getDetailMessage)
 
 module.exports = router

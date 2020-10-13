@@ -1,5 +1,5 @@
   // Call Model
-const {getAllModelRecruiter,getDetailRecruiter,loginModelRecruiter,deleteModel,getDetailCompany,updateCompanyModel,updateRecruiterModel,updateWallpaperModel} = require('../../model/recruiter/recruiterModel')
+const {getAllModelRecruiter,getDetailRecruiter,loginModelRecruiter,deleteModel,getDetailCompany,updateCompanyModel,updateRecruiterModel,updateWallpaperModel,getDetailCompany2} = require('../../model/recruiter/recruiterModel')
 const recruiterModel = require('../../model/recruiter/recruiterModel')
 // Call Response
 const {success,failed,errorServer} = require('../../helper/response')
@@ -63,19 +63,21 @@ module.exports = {
     const body = req.body
     try {
       const recruiter = await loginModelRecruiter (body)
+      
       if (recruiter.length>0) {
         const status = recruiter[0].status
-        console.log(recruiter);
           if (status!==0) {
-            const PassDb = recruiter[0].password
+        const PassDb = recruiter[0].password
         const email = recruiter[0].email_recruiter
         const idRecruiterDb = recruiter[0].id_recruiter
+        const compani = await getDetailCompany2(idRecruiterDb)
+        const idCompany = compani[0].id_company
         const role = 1
           const matchPass = await bcrypt.compare(body.password,PassDb)
           if (matchPass) {
             // Success
               jwt.sign({email:email,role:role},JWTRECRUITER, (err,tokenacc) => {
-                success(res, {id:idRecruiterDb,role:role,tokenacc}, 'Success')
+                success(res, {id:idRecruiterDb,idCompany:idCompany,email:email,role:role,tokenacc}, 'Success')
               })
           }else{
             failed(res,[],'Wrong password')
@@ -181,7 +183,7 @@ updateWallpaper:  (req,res) => {
         const dataCompany = await getDetailCompany(id)
         const newImage = body.wallpaper_image
         const {wallpaper_image} = body
-        if (wallpaper_image !=='') {
+        if (wallpaper_image !==''||wallpaper_image!==null) {
           if (newImage) {
             //     // With Image
             if (dataCompany[0].wallpaper_image==='' || dataCompany[0].wallpaper_image===null) {
