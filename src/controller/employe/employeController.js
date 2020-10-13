@@ -131,7 +131,7 @@ module.exports = {
       const regis  = await register(name, email, phone_number, hashpas)
       success(res, regis, 'berhasil register')
     } catch (error) {
-      res.send(error.message)
+      failed(res,error.message,'Email has been registered')
     }
   },
   verification: (req,res) => {
