@@ -15,6 +15,17 @@ module.exports = {
       })
     })
   },
+  getDetailEmploye: () => {
+    return new Promise((resolve,reject) => {
+      db.query(`SELECT * FROM employe WHERE id = ${id}`, (err, result) => {
+        if(err){
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
   loginModelRecruiter : (data) => {
     return new Promise((resolve,reject) => {
       db.query(`SELECT * FROM recruiter WHERE email_recruiter='${data.email}'`, (err,result) => {

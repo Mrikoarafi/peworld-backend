@@ -106,7 +106,7 @@ module.exports = {
   ) => {
     return new Promise((resolve, reject) => {
       db.query(
-        `UPDATE employe set name='${name}', image_employe='${image}', phone_number=${phone_number}, jobdesk='${jobdesk}', domisili='${domisili}', workplace='${workplace}', description='${description}', instagram='${instagram}', github='${github}', linkedin='${linkedin}'  WHERE id_employe = '${id}'  `,
+        `UPDATE employe set name='${name}', phone_number=${phone_number}, jobdesk='${jobdesk}', domisili='${domisili}', workplace='${workplace}', description='${description}', instagram='${instagram}', github='${github}', linkedin='${linkedin}'  WHERE id_employe = '${id}'  `,
         (err, result) => {
           if (err) {
             console.log(err.message)
@@ -231,6 +231,19 @@ module.exports = {
       db.query(`UPDATE employe SET password='${password}', user_key=null WHERE user_key='${userKey}'`, (err, result) => {
         if (err) {
           reject(new Error(err))
+        } else {
+          resolve(result)
+        }
+      })
+    })
+  },
+  getallPortofolio: (id) => {
+    return new Promise((resolve,reject) => {
+      db.query(`SELECT * from portfolio where id_employe = ${id}`, (err, result) =>{
+        console.log(result)
+        console.log(err)
+        if(err){
+          reject(err)
         } else {
           resolve(result)
         }

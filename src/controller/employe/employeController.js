@@ -13,6 +13,7 @@ const {
   insertPortofolio,
   inseertSkill,
   updateEmployeimage,
+  getallPortofolio,
 } = require("../../model/employe/employeModel");
 // const {getEmailEmploye,getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,updateUserKey,newPassword} = require('../../model/employe/employeModel')
 // Call Response
@@ -143,7 +144,18 @@ module.exports = {
   updateandinsert: async (req,res) => {
     try {
             const {id} = req.params
-             const {name, jobdesk,domisili , email, workplace, description, instagram, insert, github, linkedin, work_experience, phone_number, portfolio, skill} = req.body
+            const data2 = await getDetailEmploye(id)
+             const { email, work_experience, skill} = req.body
+             const name = !req.body.name ? data2[0].name : req.body.name
+             const jobdesk = !req.body.jobdesk ? data2[0].jobdesk : req.body.jobdesk
+             const domisili = !req.body.domisili ? data2[0].domisili : req.body.domisili
+             const workplace = !req.body.workplace ? data2[0].workplace : req.body.workplace
+             const description = !req.body.description ? data2[0].description : req.body.description
+             const instagram = !req.body.instagram ? data2[0].instagram : req.body.instagram
+             const linkedin = !req.body.linkedin ? data2[0].linkedin : req.body.linkedin
+             const github = !req.body.github ? data2[0].github : req.body.github
+             const phone_number = !req.body.phone_number ? data2[0].phone_number : req.body.phone_number
+
             //  console.log(work_experience)
              await updateEmploye(name, jobdesk,domisili , email, workplace, description, instagram, github, linkedin, phone_number, id)
              const skill2 = skill.map( async (dt) => {
@@ -273,6 +285,16 @@ module.exports = {
       })
     } catch (error) {
       failed(res, error.message, "failed update")
+    }
+  },
+
+  displayPortofolio: async (req,res) => {
+    try {
+      const {id} = req.params
+      const data = await getallPortofolio(id)
+      success(res, data, "getall success")
+    } catch (error) {
+      failed(res, error.message, "failed")
     }
   }
 }

@@ -14,6 +14,7 @@ const {
   updateandinsert,
   profilEdit,
   imageedit,
+  displayPortofolio,
 } = require("../../controller/employe/employeController");
 const {authentikasi,employe,recruiter } = require('../../helper/authentikasi')
 router
@@ -29,6 +30,7 @@ router
   .put("/edit/:id", updateandinsert)
   .post("/portofolio", profilEdit)
   .put("/image/:id", imageedit)
+  .get("/getall/profile/:id", displayPortofolio)
   //end edit profile
   .get("/getAll", authentikasi, employe, getAllControllerEmploye)
   .get("/getDetail/:id", getDetailController)
