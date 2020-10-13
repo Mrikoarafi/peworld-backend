@@ -17,7 +17,24 @@ const {
 io.on('connection', (socket) => {
   console.log('user connected')
 
-  socket.on('get-all-users', () => {})
+  socket.on('get-recruiter', (recruiter) => {
+    console.log(recruiter)
+    db.query(`SELECT * FROM recruiter WHERE email_recruiter='${recruiter}'`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(result)
+        const id = result[0].id_recruiter
+        db.query(`SELECT * FROM company WHERE id_recruiter='${id}'`, (err, result) => {
+          if (err) {
+            console.log(err)
+          } else {
+            console.log(result)
+          }
+        })
+      }
+    })
+  })
 
   socket.on('join-room', (payload) => {
     socket.join(payload)

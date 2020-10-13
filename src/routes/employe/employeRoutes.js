@@ -7,7 +7,7 @@ const router = express.Router()
     } = require("../../controller/employe/employeController");
 
 // Call Controller
-const {getAllControllerEmploye,getDetailController,loginController,register,verification,refreshtoken,logoutController,deleteController,getSkillController,getPortfolioController,getWorkExperienceController} = require('../../controller/employe/employeController')
+const {getAllControllerEmploye,getDetailController,loginController,register,verification,refreshtoken,logoutController,deleteController,getSkillController,getPortfolioController,getWorkExperienceController, forgetPassword, resetPassword} = require('../../controller/employe/employeController')
 const {authentikasi,employe,recruiter} = require('../../helper/authentikasi')
 router
 .get('/getAll', getAllControllerEmploye)
@@ -25,5 +25,8 @@ router
   .put("/edit/:id", updateandinsert)
   .post("/portofolio", profilEdit)
   .put("/image/:id", imageedit)
+  //forget password
+  .post('/forgotPassword', forgetPassword)
+  .post('/resetPassword', resetPassword)
 
 module.exports = router
