@@ -3,7 +3,7 @@ const db = require('../../config/db_hireapp')
 module.exports = {
   getAllModelEmploye : (where,name,orderby,sort,start,end) => {
     return new Promise((resolve,reject) => {
-      db.query(`SELECT employe.id_employe,employe.name,employe.jobdesk,employe.domisili,employe.image_employe,GROUP_CONCAT(skills.name_skill) as skill_employe, (SELECT COUNT(*) FROM employe) as count FROM employe
+      db.query(`SELECT employe.id_employe,employe.name,employe.email,employe.phone_number,employe.jobdesk,employe.domisili,employe.workplace,employe.description,employe.github,employe.linkedin,employe.instagram,employe.image_employe,GROUP_CONCAT(skills.name_skill) as skill_employe, (SELECT COUNT(*) FROM employe) as count FROM employe
       JOIN skills ON employe.id_employe=skills.id_employe
        WHERE ${where} LIKE'%${name}%' GROUP BY(employe.id_employe) ORDER BY ${orderby} ${sort} LIMIT ${start},${end}`, (err,result) => {
       err?reject(new Error(err.message)): resolve(result);
