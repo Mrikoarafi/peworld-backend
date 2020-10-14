@@ -112,22 +112,6 @@ io.on('connection', (socket) => {
     socket.join(payload)
   })
 
-  // socket.on('send-message', (payload) => {
-  //   const room = payload.receiver
-
-  //   db.query(`INSERT INTO message (sender, receiver, message) VALUES ('${payload.sender}','${payload.receiver}','${payload.message}')`, (err, result) => {
-  //     if (err) {
-  //       console.log(err)
-  //     } else {
-  //       io.to(room).emit('private-message', {
-  //         sender: payload.sender,
-  //         receiver: room,
-  //         message: payload.message
-  //       })
-  //     }
-  //   })
-  // })
-
   socket.on('get-history-message', (payload) => {
     db.query(`SELECT * FROM message WHERE (sender='${payload.sender}' AND receiver='${payload.receiver}') OR (sender='${payload.receiver}' AND receiver='${payload.sender}')`, (err, result) => {
       if (err) {
