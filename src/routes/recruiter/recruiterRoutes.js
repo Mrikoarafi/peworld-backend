@@ -2,12 +2,13 @@ const express = require('express')
 const router = express.Router()
 
 // Call Controller
-const {getAllControllerRecruiter,getDetailController,loginController,deleteController,updateCompany,updateWallpaper} = require('../../controller/recruiter/recruiterController')
+const {getAllControllerRecruiter,getDetailController,loginController,deleteController,updateCompany,updateWallpaper,getDetailCompany} = require('../../controller/recruiter/recruiterController')
 const {authentikasi,recruiter} = require('../../helper/authentikasi')
 const recruiterController = require('../../controller/recruiter/recruiterController')
 router
 .get('/getAll', getAllControllerRecruiter)
 .get('/getDetail/:id', getDetailController)
+.get('/getDetailCompany/:id', getDetailCompany)
 .put('/updateCompany/:id', updateCompany)
 .put('/updateWallpaper/:id', updateWallpaper)
 .post('/login', loginController)
