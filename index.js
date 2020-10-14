@@ -47,24 +47,55 @@ io.on('connection', (socket) => {
   })
 
   socket.on('send-message', payload => {
-    const message = `
-      ${payload.sender}: ${payload.message}
-    `
-     io.to(payload.receiver).emit('get-message', {
-       sender: payload.sender,
-       receiver: payload.receiver,
-       message: message
-     })
+    db.query(`INSERT INTO message (sender, receiver, message) VALUES ('${payload.sender}','${payload.receiver}','${payload.message}')`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        // console.log(result)
+        const message = `
+          ${payload.sender}: ${payload.message}
+        `
+        io.to(payload.receiver).emit('get-message', {
+          sender: payload.sender,
+          receiver: payload.receiver,
+          message: message
+        })
+      }
+    })
+  })
+
+  socket.on('get-all-message', payload => {
+    db.query(`SELECT * FROM message WHERE sender='${payload.sender}' AND receiver='${payload.receiver}' OR sender='${payload.receiver}' AND receiver='${payload.sender}'`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        // console.log(result)
+        io.to(payload.sender).emit('get-history-message', result)
+      }
+    })
   })
 
   socket.on('send-hire-message', (payload) => {
     db.query(`INSERT INTO message (sender, receiver, message) VALUES ('${payload.sender}','${payload.receiver}','${payload.message}')`, (err, result) => {
-      console.log(result)
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(result)
+        // const message = `
+        //   ${payload.sender}: ${payload.message}
+        // `
+        // io.to(payload.receiver).emit('get-message', {
+        //   sender: payload.sender,
+        //   receiver: payload.receiver,
+        //   message: message
+        // })
+      }
     })
   })
 
   socket.on('get-all-calling', (email) => {
     db.query(`SELECT * FROM calling_recruiter WHERE email_employe='${email}' OR email_recruiter='${email}'`, (err, result) => {
+      console.log(result)
       if (err) {
         console.log(err)
       } else {
@@ -116,7 +147,6 @@ const path = require('path')
 const ejs = require('ejs')
 
 app.use(express.static("src/img"));
-app.use(express.static('public/images'))
 app.use(cors());
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'src/views'))

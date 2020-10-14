@@ -93,7 +93,7 @@ module.exports = {
   sendEmailForgotEmploye: (email, userkey) => {
     const output = `
           <center><h3>Hello ${email}</h3>
-          <p>You can reset your password by clicking the link below <br> <a href="http://localhost:8080/forgot?key=${userkey}">Reset Password</a></p></center>
+          <p>You can reset your password by clicking the link below <br> <a href="http://localhost:8080/forgot-employe?key=${userkey}">Reset Password</a></p></center>
     `
 
     let transporter = nodemailer.createTransport({
