@@ -23,7 +23,7 @@ const {
 const {success,failed,errorServer,dataTable} = require('../../helper/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {sendEmailEmploye} = require('../../helper/sendEmail')
+const {sendEmailEmploye, sendEmailForgotEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
 const upload = require('../../helper/uploadEmploye')
 const path = require('path')
