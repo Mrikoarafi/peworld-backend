@@ -79,6 +79,7 @@ const path = require('path')
 const ejs = require('ejs')
 
 app.use(express.static("src/img"));
+app.use(express.static('public/images'))
 app.use(cors());
 app.use(bodyParser.json());
 app.set('views', path.join(__dirname, 'src/views'))
