@@ -15,8 +15,10 @@ const {
   inseertSkill,
   updateEmployeimage,
   getallPortofolio,
+  getEmailEmploye,
+  newPassword,
+  updateUserKey
 } = require("../../model/employe/employeModel");
-// const {getEmailEmploye,getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,updateUserKey,newPassword} = require('../../model/employe/employeModel')
 // Call Response
 const {success,failed,errorServer,dataTable} = require('../../helper/response')
 const bcrypt = require('bcrypt')

@@ -26,8 +26,6 @@ const {
   forgetPassword,
   resetPassword
 } = require("../../controller/employe/employeController");
-// const {authentikasi,employe,recruiter } = require('../../helper/authentikasi')
-// const {getAllControllerEmploye,getDetailController,loginController,register,verification,refreshtoken,logoutController,deleteController,getSkillController,getPortfolioController,getWorkExperienceController, forgetPassword, resetPassword} = require('../../controller/employe/employeController')
 const {authentikasi,employe,recruiter} = require('../../helper/authentikasi')
 router
 .get('/getAll', getAllControllerEmploye)
