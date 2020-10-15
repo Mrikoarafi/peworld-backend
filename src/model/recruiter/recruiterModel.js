@@ -8,13 +8,24 @@ getAllModelRecruiter : () => {
     })
   })
 },
-getDetailRecruiter : (id) => {
-  return new Promise((resolve,reject) => {
-    db.query(`SELECT recruiter.id_recruiter,company.id_company,recruiter.name_recruiter,recruiter.email_recruiter,recruiter.company_name,recruiter.position,recruiter.phone_number,recruiter.created_at,company.sector,company.city,company.description,company.company_email,company.instagram,company.phone_number,company.linkedin,company.image_company,company.wallpaper_image FROM recruiter JOIN company ON recruiter.id_recruiter=company.id_recruiter WHERE recruiter.id_recruiter=${id}`, (err,result) => {
-      err?reject(new Error(err.message)): resolve(result)
+  getDetailEmploye: () => {
+    return new Promise((resolve,reject) => {
+      db.query(`SELECT * FROM employe WHERE id = ${id}`, (err, result) => {
+        if(err){
+          reject(err)
+        } else {
+          resolve(result)
+        }
+      })
     })
-  })
-},
+  },
+  getDetailRecruiter: (id) => {
+    return new Promise((resolve, reject) => {
+      db.query(`SELECT recruiter.id_recruiter,company.id_company,recruiter.name_recruiter,recruiter.email_recruiter,recruiter.company_name,recruiter.position,recruiter.phone_number,recruiter.created_at,company.sector,company.city,company.description,company.company_email,company.instagram,company.phone_number,company.linkedin,company.image_company,company.wallpaper_image FROM recruiter JOIN company ON recruiter.id_recruiter=company.id_recruiter WHERE recruiter.id_recruiter=${id}`, (err, result) => {
+        err ? reject(new Error(err.message)) : resolve(result)
+      })
+    })
+  },
 loginModelRecruiter : (data) => {
   return new Promise((resolve,reject) => {
     db.query(`SELECT * FROM recruiter WHERE email_recruiter='${data.email}'`, (err,result) => {
@@ -156,6 +167,6 @@ getDetailCompany2 : (id) => {
       err?reject(new Error(err.message)): resolve(result)
     })
   })
-}
+},
 }
 

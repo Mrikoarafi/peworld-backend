@@ -16,5 +16,6 @@ router
 .get('/verify/:token', recruiterController.verify)
 .post('/forgotPassword', recruiterController.forgetPassword)
 .post('/resetPassword', recruiterController.resetPassword)
+// .get('/detailMessage/:receiver', recruiterController.getDetailMessage)
 
 module.exports = router
