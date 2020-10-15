@@ -28,6 +28,15 @@ module.exports = {
       errorServer(res, [], error.message)
     }
   },
+  getDetailCompany : async (req,res) => {
+    const id = req.params.id
+    try {
+      const DetailCompany = await getDetailCompany(id)
+      success(res, DetailCompany, 'Success get detail data Company')
+    } catch (error) {
+      errorServer(res, [], error.message)
+    }
+  },
   register: async (req, res) => {
     try {
       const body = req.body

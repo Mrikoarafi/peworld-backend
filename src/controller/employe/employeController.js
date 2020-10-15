@@ -1,5 +1,4 @@
 // Call Model
-const {getWorkExperience,getSkill,getPortfolio} = require('../../model/employe/employeModel')
 const {
   getAllModelEmploye,
   getDetailEmploye,
@@ -15,13 +14,18 @@ const {
   inseertSkill,
   updateEmployeimage,
   getallPortofolio,
+  getEmailEmploye,
+  newPassword,
+  updateUserKey,
+  getWorkExperience,
+  getSkill,
+  getPortfolio
 } = require("../../model/employe/employeModel");
-// const {getEmailEmploye,getAllModelEmploye,getDetailEmploye,loginModelEmploye,register,verification,UpdateRefreshToken,logoutModel,deleteModel,updateUserKey,newPassword} = require('../../model/employe/employeModel')
 // Call Response
 const {success,failed,errorServer,dataTable} = require('../../helper/response')
 const bcrypt = require('bcrypt')
 const jwt = require('jsonwebtoken')
-const {sendEmailEmploye} = require('../../helper/sendEmail')
+const {sendEmailEmploye, sendEmailForgotEmploye} = require('../../helper/sendEmail')
 const { JWTEMPLOYE, JWT_REFRESH } = require('../../helper/env')
 const upload = require('../../helper/uploadEmploye')
 const path = require('path')
@@ -66,7 +70,7 @@ module.exports = {
   getSkillController : async (req,res) => {
     const id = req.params.id
     try {
-      const DetailSkill = await getSkill(id)
+      const DetailSkill = await getSkill(id);
       success(res, DetailSkill, 'Success get detail skill Employe')
     } catch (error) {
       errorServer(res, [], error.message)
@@ -131,7 +135,7 @@ module.exports = {
       const regis  = await register(name, email, phone_number, hashpas)
       success(res, regis, 'berhasil register')
     } catch (error) {
-      res.send(error.message)
+      failed(res,error.message,'Email has been registered')
     }
   },
   verification: (req,res) => {
@@ -144,7 +148,7 @@ module.exports = {
           } else {
             const email = decode.email
              await verification(email)
-             res.render("index", { email });
+             res.render("sendEmploye", { email });
             //  success(res, data, 'activated email success')
           }
         })

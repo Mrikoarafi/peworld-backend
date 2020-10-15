@@ -17,7 +17,92 @@ const {
 io.on('connection', (socket) => {
   console.log('user connected')
 
-  socket.on('get-all-users', () => {})
+  socket.on('get-calling-recruiter', (recruiter) => {
+    console.log(recruiter)
+    db.query(`SELECT * FROM recruiter WHERE email_recruiter='${recruiter}'`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(result)
+        const id = result[0].id_recruiter
+        db.query(`SELECT * FROM company WHERE id_recruiter='${id}'`, (err, result) => {
+          if (err) {
+            console.log(err)
+          } else {
+            console.log(result)
+          }
+        })
+      }
+    })
+  })
+
+  socket.on('send-hire-calling', (payload) => {
+    db.query(`INSERT INTO calling_recruiter (id_company, email_recruiter, email_employe) VALUES ('${payload.id_company}','${payload.email_recruiter}','${payload.email_employe}')`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        io.to(payload.email_employe).emit('list-calling', payload)
+      }
+    })
+  })
+
+  socket.on('send-message', payload => {
+    db.query(`INSERT INTO message (sender, receiver, message) VALUES ('${payload.sender}','${payload.receiver}','${payload.message}')`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        // console.log(result)
+        const message = `
+          ${payload.sender}: ${payload.message}
+        `
+        io.to(payload.receiver).emit('get-message', {
+          sender: payload.sender,
+          receiver: payload.receiver,
+          message: message
+        })
+      }
+    })
+  })
+
+  socket.on('get-all-message', payload => {
+    db.query(`SELECT * FROM message WHERE sender='${payload.sender}' AND receiver='${payload.receiver}' OR sender='${payload.receiver}' AND receiver='${payload.sender}'`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        // console.log(result)
+        io.to(payload.sender).emit('get-history-message', result)
+      }
+    })
+  })
+
+  socket.on('send-hire-message', (payload) => {
+    db.query(`INSERT INTO message (sender, receiver, message) VALUES ('${payload.sender}','${payload.receiver}','${payload.message}')`, (err, result) => {
+      if (err) {
+        console.log(err)
+      } else {
+        console.log(result)
+        const message = `
+          ${payload.sender}: ${payload.message}
+        `
+        io.to(payload.receiver).emit('get-message', {
+          sender: payload.sender,
+          receiver: payload.receiver,
+          message: message
+        })
+      }
+    })
+  })
+
+  socket.on('get-all-calling', (email) => {
+    db.query(`SELECT * FROM calling_recruiter WHERE email_employe='${email}' OR email_recruiter='${email}'`, (err, result) => {
+      console.log(result)
+      if (err) {
+        console.log(err)
+      } else {
+        io.emit('list-calling', result)
+      }
+    })
+  })
 
   socket.on('join-room', (payload) => {
     socket.join(payload)
@@ -25,22 +110,6 @@ io.on('connection', (socket) => {
 
   socket.on('private-room', (payload) => {
     socket.join(payload)
-  })
-
-  socket.on('send-message', (payload) => {
-    const room = payload.receiver
-
-    db.query(`INSERT INTO message (sender, receiver, message) VALUES ('${payload.sender}','${payload.receiver}','${payload.message}')`, (err, result) => {
-      if (err) {
-        console.log(err)
-      } else {
-        io.to(room).emit('private-message', {
-          sender: payload.sender,
-          receiver: room,
-          message: payload.message
-        })
-      }
-    })
   })
 
   socket.on('get-history-message', (payload) => {
