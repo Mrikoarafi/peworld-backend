@@ -1,5 +1,5 @@
 // Call Model
-const {getWorkExperience,geetSkill,getPortfolio} = require('../../model/employe/employeModel')
+const {getWorkExperience,getSkill,getPortfolio} = require('../../model/employe/employeModel')
 const {
   getAllModelEmploye,
   getDetailEmploye,
