@@ -1,5 +1,4 @@
 // Call Model
-const {getWorkExperience,getSkill,getPortfolio} = require('../../model/employe/employeModel')
 const {
   getAllModelEmploye,
   getDetailEmploye,
@@ -17,7 +16,10 @@ const {
   getallPortofolio,
   getEmailEmploye,
   newPassword,
-  updateUserKey
+  updateUserKey,
+  getWorkExperience,
+  getSkill,
+  getPortfolio
 } = require("../../model/employe/employeModel");
 // Call Response
 const {success,failed,errorServer,dataTable} = require('../../helper/response')
@@ -68,7 +70,7 @@ module.exports = {
   getSkillController : async (req,res) => {
     const id = req.params.id
     try {
-      const DetailSkill = await getSkill(id)
+      const DetailSkill = await getSkill(id);
       success(res, DetailSkill, 'Success get detail skill Employe')
     } catch (error) {
       errorServer(res, [], error.message)

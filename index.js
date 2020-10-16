@@ -81,14 +81,14 @@ io.on('connection', (socket) => {
         console.log(err)
       } else {
         console.log(result)
-        // const message = `
-        //   ${payload.sender}: ${payload.message}
-        // `
-        // io.to(payload.receiver).emit('get-message', {
-        //   sender: payload.sender,
-        //   receiver: payload.receiver,
-        //   message: message
-        // })
+        const message = `
+          ${payload.sender}: ${payload.message}
+        `
+        io.to(payload.receiver).emit('get-message', {
+          sender: payload.sender,
+          receiver: payload.receiver,
+          message: message
+        })
       }
     })
   })
