@@ -148,8 +148,7 @@ module.exports = {
           } else {
             const email = decode.email
              await verification(email)
-             res.render("sendEmploye", { email });
-            //  success(res, data, 'activated email success')
+             return res.render("sendEmploye", { email });
           }
         })
       }

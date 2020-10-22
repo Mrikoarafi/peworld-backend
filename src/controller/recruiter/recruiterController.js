@@ -112,7 +112,7 @@ module.exports = {
           const email = decode.email
           const id = decode.id
           recruiterModel.updateStatus(email,id).then((result) => {
-            res.render('index', { email })
+            return res.render('index', { email })
           }).catch((err) => {
             failed(res, [], err.message)
           })
